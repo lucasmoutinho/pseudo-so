@@ -45,7 +45,30 @@ class IOManager
         @@resources[:sata][index] = pid
       end
     end
+  end
 
+  def free_resource(process)
+    pid = process.pid
+
+    scanner_index = @@resources[:scanner].index(pid)
+    if scanner_index
+      @@resources[:scanner][scanner_index] = nil
+    end
+
+    printer_index = @@resources[:printer].index(pid)
+    if printer
+      @@resources[:printer][printer_index] = nil
+    end
+
+    modem_index = @@resources[:modem].index(pid)
+    if modem_index
+      @@resources[:modem][modem_index] = nil
+    end
+
+    sata_index = @@resources[:sata].index(pid)
+    if sata_index
+      @@resources[:sata][sata_index] = nil
+    end
   end
 
 end
