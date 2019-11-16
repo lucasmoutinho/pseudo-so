@@ -1,4 +1,4 @@
-class Logger
+class SOLogger
   @@last_process = nil
 
   def dispatch(process) # informações do processo à ser dispatched

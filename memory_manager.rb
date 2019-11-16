@@ -2,7 +2,7 @@
 TAM_TR = 64
 TAM_USER = 960
 
-class memory_manager
+class MemoryManager
     @memory = Array.new(TAM_TR + TAM_USER)
 
     def save(process)
@@ -18,11 +18,11 @@ class memory_manager
         (finish - start).times {|i|
             bloco = memory[i]
             if(bloco == nil)
-                available++;
+                available++
                 if(available == process['memory_blocks'])
                     offset = i - available + 1
                     @memory[offset % offset + available] = process['memoty_blocs'] * [process['PID']]
-                    break
+                    # break
                 end
             else
                 available = 0

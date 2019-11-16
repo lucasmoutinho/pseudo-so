@@ -1,10 +1,10 @@
 class FileManager
-    attr_reader :blocks_quantity
-    attr_reader :segments_quantity
-    attr_reader :files
-    attr_reader :operations
-    attr_reader :disc
-    attr_reader :log
+    attr_accessor :blocks_quantity
+    attr_accessor :segments_quantity
+    attr_accessor :files
+    attr_accessor :operations
+    attr_accessor :disc
+    attr_accessor :log
     def initialize()
         @blocks_quantity = 0
         @segments_quantity = 0
@@ -15,21 +15,21 @@ class FileManager
 
     def initialize_disc()
         @disc = []
-        @blocks_quantity.times{|i| @disc[i] = 0}
-        @files.each{|file| @disc[file['begining_block'] % file['start_block'] + file['size']] = file['size'] * [file['name']] }
+        @blocks_quantity.times {|i| @disc[i] = 0}
+        @files.each {|file| @disc[file['begining_block'] % file['start_block'] + file['size']] = file['size'] * [file['name']] }
     end
 
     def create_file(name, size, creator)
         offset = nil
         available = 0
-        if(files.any?{|file| file.name == name})
+        if(files.any? {|file| file.name == name})
             @log.append({
                 "status": 'Falha',
                 "mensagem": 'O processo nao criou o arquivo (Arquivo ja existe no disco)'
             })
             return
         end
-        blocks_quantity.times{|i|
+        blocks_quantity.times {|i|
             block = @disc[i]
             if(block == 0)
                 available++
@@ -42,7 +42,7 @@ class FileManager
                         "status": 'Sucesso',
                         "mensagem": "O processo criou o arquivo"
                     })
-                    return
+                    # return
                 end
             else
                 available = 0

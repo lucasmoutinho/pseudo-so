@@ -4,15 +4,17 @@ class IOManager
   MODEM_QUANTITY = 1
   SATA_QUANTITY = 2
 
-  @@resources = {
-    scanner: Array.new(SCANNER_QUANTITY),
-    printer: Array.new(PRINTER_QUANTITY),
-    modem: Array.new(MODEM_QUANTITY),
-    sata: Array.new(SATA_QUANTITY)
-  }
+  def initiailze
+    @resources = {
+        scanner: Array.new(SCANNER_QUANTITY),
+        printer: Array.new(PRINTER_QUANTITY),
+        modem: Array.new(MODEM_QUANTITY),
+        sata: Array.new(SATA_QUANTITY)
+    }
+  end
 
   def is_resource_available?(resource) # checa se tem algum espaço disponivel daquele recurso
-    @@resources[resource].any?{ |e| e.nil? }
+    @resources[resource].any?{ |e| e.nil? }
   end
 
   def alocate_resource(process)
@@ -20,29 +22,29 @@ class IOManager
 
     if process.scanner?
       if is_resource_available?(:scanner)
-        index = @@resources[:scanner].index(nil)
-        @@resources[:scanner][index] = pid
+        index = @resources[:scanner].index(nil)
+        @resources[:scanner][index] = pid
       end
     end
 
     if process.printer?
       if is_resource_available?(:printer)
-        index = @@resources[:printer].index(nil)
-        @@resources[:printer][index] = pid
+        index = @resources[:printer].index(nil)
+        @resources[:printer][index] = pid
       end
     end
 
     if process.modem?
       if is_resource_available?(:modem)
-        index = @@resources[:modem].index(nil)
-        @@resources[:modem][index] = pid
+        index = @resources[:modem].index(nil)
+        @resources[:modem][index] = pid
       end
     end
 
     if process.sata
       if is_resource_available?(:sata)
-        index = @@resources[:sata].index(nil)
-        @@resources[:sata][index] = pid
+        index = @resources[:sata].index(nil)
+        @resources[:sata][index] = pid
       end
     end
   end
@@ -50,24 +52,24 @@ class IOManager
   def free_resource(process)
     pid = process.pid
 
-    scanner_index = @@resources[:scanner].index(pid)
+    scanner_index = @resources[:scanner].index(pid)
     if scanner_index
-      @@resources[:scanner][scanner_index] = nil
+      @resources[:scanner][scanner_index] = nil
     end
 
-    printer_index = @@resources[:printer].index(pid)
+    printer_index = @resources[:printer].index(pid)
     if printer
-      @@resources[:printer][printer_index] = nil
+      @resources[:printer][printer_index] = nil
     end
 
-    modem_index = @@resources[:modem].index(pid)
+    modem_index = @resources[:modem].index(pid)
     if modem_index
-      @@resources[:modem][modem_index] = nil
+      @resources[:modem][modem_index] = nil
     end
 
-    sata_index = @@resources[:sata].index(pid)
+    sata_index = @resources[:sata].index(pid)
     if sata_index
-      @@resources[:sata][sata_index] = nil
+      @resources[:sata][sata_index] = nil
     end
   end
 
