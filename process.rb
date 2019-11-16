@@ -1,4 +1,16 @@
 class SOProcess
+  attr_accessor :created_at
+  attr_accessor :priority
+  attr_accessor :cpu_time
+  attr_accessor :memory_blocks
+  attr_accessor :printer_code
+  attr_accessor :scanner_request
+  attr_accessor :modem_request
+  attr_accessor :sata_code
+  attr_accessor :offset
+  attr_accessor :pid
+  attr_accessor :times_executed
+
   @@io_request_types = %i[scanner printer modem sata none]
 
   def initialize(process)

@@ -17,18 +17,34 @@ def main
   process_file = "processes.txt"
   files_file = "files.txt"
 
-  puts process_manager.main_queue
-  puts filesystem_manager.files
+  puts "Before read"
+  # puts process_manager.main_queue
+  # puts filesystem_manager.files
   # Ler arquivo de processos
-  process_manager.main_queue = File.readlines(process_file)
+  aux_process_array = File.readlines(process_file)
+  aux_process_array.each do |process|
+    new_process = SOProcess.new(process.split(','))
+    puts "New Process:"
+    puts new_process.created_at
+    process_manager.main_queue.push(new_process)
+  end
 
   # Ler arquivo do sistema de arquivos
-  filesystem_manager.files = File.readlines(files_file)
+  aux_filesystem_array = File.readlines(files_file)
+  aux_filesystem_array.each do |file|
+    new_file = File.new(file.split(','))
+    filesystem_manager.files.push(new_file)
+  end
 
+  puts "After read"
   puts process_manager.main_queue
   puts filesystem_manager.files
 
-  puts "Thats it"
+  # process_manager.main_queue = process_manager.main_queue.sort_by { |process| process.created_at  }
+
+  # while(true)
+  #
+  # end
 end
 
 main

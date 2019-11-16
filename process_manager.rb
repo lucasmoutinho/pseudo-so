@@ -1,4 +1,6 @@
 class ProcessManager
+  MAX_SIZE = 10
+
   attr_accessor :real_time_queue
   attr_accessor :user_queue
   attr_accessor :first_queue
@@ -9,12 +11,12 @@ class ProcessManager
   attr_accessor :lastPID
 
   def initialize
-    @real_time_queue = Array.new(1000)
-    @user_queue = Array.new(1000)
-    @first_queue = Array.new(1000)
-    @second_queue = Array.new(1000)
-    @third_queue = Array.new(1000)
-    @main_queue = Array.new(1000)
+    @real_time_queue = Array.new(MAX_SIZE)
+    @user_queue = Array.new(MAX_SIZE)
+    @first_queue = Array.new(MAX_SIZE)
+    @second_queue = Array.new(MAX_SIZE)
+    @third_queue = Array.new(MAX_SIZE)
+    @main_queue = Array.new(MAX_SIZE)
     @in_execution = nil # processo em execução atualmente
     @lastPID = 0
   end
