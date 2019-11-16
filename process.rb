@@ -10,6 +10,7 @@ class Process
     @scanner_request = process.scanner_request
     @modem_request = process.modem_request
     @sata_code = process.sata_code
+    @offset = nil
     @pid = nil
     @times_executed = 0
   end
