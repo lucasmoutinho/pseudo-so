@@ -56,21 +56,25 @@ class IOManager
 
     scanner_index = self.resources[:scanner].index(pid)
     if scanner_index
+      puts "Liberado scanner"
       @resources[:scanner][scanner_index] = nil
     end
 
     printer_index = @resources[:printer].index(pid)
     if printer_index
+      puts "Liberado impressora"
       @resources[:printer][printer_index] = nil
     end
 
     modem_index = @resources[:modem].index(pid)
     if modem_index
+      puts "Liberado modem"
       @resources[:modem][modem_index] = nil
     end
 
     sata_index = @resources[:sata].index(pid)
     if sata_index
+      puts "Liberado sata"
       @resources[:sata][sata_index] = nil
     end
   end
