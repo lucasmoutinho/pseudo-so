@@ -45,11 +45,13 @@ def main
 
   puts "After sort"
   puts process_manager.main_queue
+  puts "\n\n"
 
   time = 0
   loop do
-    puts time
-    puts process_manager.main_queue
+    # puts time
+    # puts process_manager.main_queue
+    process_manager.print_all_queues
     while process_manager.main_queue.any? # enquanto tiver processos na fila principal
       if process_manager.main_queue.first.created_at.to_i.equal? time.to_i # se o processo tiver chegado naquele tempo
         process_manager.scalonate_process

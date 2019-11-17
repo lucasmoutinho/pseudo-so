@@ -21,8 +21,22 @@ class ProcessManager
     @lastPID = 0
   end
 
+  def print_all_queues
+    puts ":::::MAIN_QUEUE:::::"
+    puts main_queue
+    puts ":::::REAL_TIME_QUEUE:::::"
+    puts real_time_queue
+    puts ":::::USER_QUEUE:::::"
+    puts user_queue
+    puts ":::::FIRST_QUEUE:::::"
+    puts first_queue
+    puts ":::::SECOND_QUEUE:::::"
+    puts second_queue
+    puts ":::::THIRD_QUEUE:::::"
+    puts third_queue
+  end
+
   def scalonate_process # função utilizada para escalonar processos
-    puts "queue length: #{@main_queue.length}"
     if @main_queue.length > 0
       process_on_top = @main_queue.shift # para ser uma fila
 
