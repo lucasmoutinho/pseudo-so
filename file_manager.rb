@@ -43,7 +43,7 @@ class FileManager
                 if(available == size)
                     offset = i - available + 1
                     if offset != 0
-                        @disc[offset % offset + available]
+                        @disc[offset % offset + available] = name
                     end
                     file = File.new([name, offset, size], creator)
                     @files.append(file)
