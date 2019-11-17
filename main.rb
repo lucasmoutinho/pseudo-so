@@ -31,14 +31,25 @@ def main
 
   # Ler arquivo do sistema de arquivos
   aux_filesystem_array = File.readlines(files_file)
-  aux_filesystem_array.each do |file|
-    new_file = File.new(file.split(','))
+  blocks_quantity = aux_filesystem_array.shift.to_i
+  disk_segments = aux_filesystem_array.shift.to_i
+  disk_segments.times do
+    aux_file = aux_filesystem_array.shift
+    new_file = File.new(aux_file.split(','))
     filesystem_manager.files.push(new_file)
+  end
+
+  aux_filesystem_array.each do |operation|
+    aux_operation = FileOperation.new(operation.split(','))
+    filesystem_manager.operations.push aux_operation
   end
 
   puts "After read"
   puts process_manager.main_queue
   puts filesystem_manager.files
+
+  # inicializa o disco
+  filesystem_manager.initialize_disc
 
   # Ordena a fila principal por prioridade
   process_manager.main_queue = process_manager.main_queue.compact.sort_by{|process| process.created_at}
@@ -71,6 +82,7 @@ def main
 
       logger.execute(process_manager.in_execution)
       if process_manager.in_execution.cpu_time.zero? # se acabar o tempo de cpu do processo
+        filesystem_manager.operate_process(process_manager.in_execution)
         io_manager.free_resource(process_manager.in_execution)
         memory_manager.kill(process_manager.in_execution)
         process_manager.remove_process(process_manager.in_execution)
@@ -180,6 +192,8 @@ def main
 
     time += 1
   end
+
+  logger.disk_manager(filesystem_manager)
 end
 
 main

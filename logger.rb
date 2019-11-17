@@ -32,4 +32,20 @@ class SOLogger
       @@last_process = -1
     end
   end
+
+  def disk_manager(filesystem)
+    puts "File system =>"
+    filesystem.log.each_with_index do |msg, idx|
+      puts "Operação #{idx + 1} => #{msg.status}"
+      puts msg.mensagem
+    end
+
+    filesystem.operations.each_with_index do |op, idx|
+      puts "Operação #{idx+1} => Falha"
+      puts "O processo #{op.processId} não existe"
+    end
+
+    puts "Ocupação do disco:"
+    puts filesystem.disc
+  end
 end

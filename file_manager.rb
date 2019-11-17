@@ -10,13 +10,18 @@ class FileManager
         @segments_quantity = 0
         @files = []
         @operations = []
+        @disc = []
         @log = []
     end
 
     def initialize_disc()
         @disc = []
         @blocks_quantity.times {|i| @disc[i] = 0}
-        @files.each {|file| @disc[file['begining_block'] % file['start_block'] + file['size']] = file['size'] * [file['name']] }
+        @files.each do |file|
+            if file.start_block != 0
+                @disc[file.start_block % file.start_block + file.size] = file.size * file.name.to_i
+            end
+        end
     end
 
     def create_file(name, size, creator)
@@ -24,8 +29,8 @@ class FileManager
         available = 0
         if(files.any? {|file| file.name == name})
             @log.append({
-                "status": 'Falha',
-                "mensagem": 'O processo nao criou o arquivo (Arquivo ja existe no disco)'
+                status: 'Falha',
+                mensagem: 'O processo nao criou o arquivo (Arquivo ja existe no disco)'
             })
             return
         end
@@ -39,8 +44,8 @@ class FileManager
                     file = File([name, offset, size], creator)
                     @files.append(file)
                     @log.append({
-                        "status": 'Sucesso',
-                        "mensagem": "O processo criou o arquivo"
+                        status: 'Sucesso',
+                        mensagem: "O processo criou o arquivo"
                     })
                     # return
                 end
@@ -49,17 +54,18 @@ class FileManager
             end
         }
         @log.append({
-            "status": "Falha",
-            "mensagem": "O processo nao criou o arquivo (sem espaco livre)"
+            status: "Falha",
+            mensagem: "O processo nao criou o arquivo (sem espaco livre)"
         })
     end
 
     def delete_file(file)
-        @disc[file['start_block'] % file['start_block'] + file['size']] = file['size'] * [0]
+        @disc[file.start_block % file.start_block + file.size] = file.size * [0]
     end
 
     def operate_process(process)
-        ops = @operations.select { |op| op[:process_id] == process['process_id'] }
+        ops = @operations.select { |op| op.processId == process.pid }
+        puts "ops: #{ops}"
         ops.each do |op|
             if(op['opcode'] == 0)
                 create_file(op['file'], op['size'], process['process_id'])
@@ -69,19 +75,19 @@ class FileManager
                     if(process['priority'] == 0 || file['creator'] == nil || process['process_id'] == file['creator'])
                         delete_file(file)
                         @log.append({
-                            "status": 'sucesso',
-                            "mensagem": "O processo deletou o arquivo"
+                            status: 'sucesso',
+                            mensagem: "O processo deletou o arquivo"
                         })
                     else
                         @log.append({
-                            'status': 'Falha',
-                            'mensagem': 'O processo nao pode deletar o arquivo'
+                            status: 'Falha',
+                            mensagem: 'O processo nao pode deletar o arquivo'
                         })
                     end
                 else
                     @log.append({
-                        "status": "Falha",
-                        "mensagem": 'O processo nao pode deletar o arquivo'
+                        status: "Falha",
+                        mensagem: 'O processo nao pode deletar o arquivo'
                     })
                 end
             end

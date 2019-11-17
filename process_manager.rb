@@ -102,14 +102,17 @@ class ProcessManager
     if real_time_process
       real_time_process.priority += 1
       first_queue.push real_time_process
+      puts "Decresceu a prioridade de P#{real_time_process.pid} - Agora #{real_time_process.priority}"
     end
     if first_queue_process
       first_queue_process.priority += 1
       second_queue.push first_queue_process
+      puts "Decresceu a prioridade de P#{first_queue_process.pid} - Agora #{first_queue_process.priority}"
     end
     if second_queue_process
       second_queue_process.priority += 1
       third_queue.push second_queue_process
+      puts "Decresceu a prioridade de P#{second_queue_process.pid} - Agora #{second_queue_process.priority}"
     end
 
   end
