@@ -27,13 +27,13 @@ class MemoryManager
                         if offset != 0
                             @memory[offset % offset + available] = process.memory_blocks * [process.pid]
                         end
-                        #break
+                        break
                     end
                 else
                     available = 0
                 end
             }
-            return offset || 1
+            return offset
         end
         return nil
     end
