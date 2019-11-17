@@ -39,6 +39,9 @@ def main
     filesystem_manager.files.push(new_file)
   end
 
+  filesystem_manager.blocks_quantity = blocks_quantity
+  filesystem_manager.segments_quantity = disk_segments
+
   aux_filesystem_array.each do |operation|
     aux_operation = FileOperation.new(operation.split(','))
     filesystem_manager.operations.push aux_operation

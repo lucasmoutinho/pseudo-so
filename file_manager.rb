@@ -1,3 +1,5 @@
+require './file'
+
 class FileManager
     attr_accessor :blocks_quantity
     attr_accessor :segments_quantity
@@ -37,11 +39,13 @@ class FileManager
         blocks_quantity.times {|i|
             block = @disc[i]
             if(block == 0)
-                available++
+                available += 1
                 if(available == size)
                     offset = i - available + 1
-                    @disc[offset % offset + available]
-                    file = File([name, offset, size], creator)
+                    if offset != 0
+                        @disc[offset % offset + available]
+                    end
+                    file = File.new([name, offset, size], creator)
                     @files.append(file)
                     @log.append({
                         status: 'Sucesso',
