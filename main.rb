@@ -65,10 +65,11 @@ def main
     end
 
     if process_manager.in_execution # Aqui vem a lógica de 'executar' o processo
-      puts "Processo P#{process_manager.in_execution.pid} em execução..."
+      # puts "Processo P#{process_manager.in_execution.pid} em execução..."
       process_manager.in_execution.cpu_time -= quantum # diminui em 1 unidade de tempo a execucao
       process_manager.in_execution.times_executed += 1
 
+      logger.execute(process_manager.in_execution)
       if process_manager.in_execution.cpu_time.zero? # se acabar o tempo de cpu do processo
         # io_manager.free_resource(process_manager.in_execution)
         memory_manager.kill(process_manager.in_execution)
