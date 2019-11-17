@@ -48,7 +48,7 @@ def main
   puts "\n\n"
 
   time = 0
-  loop do
+  while process_manager.any_process_left?
     # puts time
     # process_manager.print_all_queues
 
@@ -73,6 +73,7 @@ def main
       if process_manager.in_execution.cpu_time.zero? # se acabar o tempo de cpu do processo
         # io_manager.free_resource(process_manager.in_execution)
         memory_manager.kill(process_manager.in_execution)
+        process_manager.remove_process(process_manager.in_execution)
         process_manager.in_execution = nil
       end
     else # Se não tiver processo sendo executado ve qual vai ser
@@ -164,17 +165,17 @@ def main
 
     end
 
-    unless process_manager.any_process_left?
-      break
-    end
+    # unless process_manager.any_process_left?
+    #   break
+    # end
 
-    if time > 6
+    if time > 100
       break
     end
 
     # fazer logica de escalonador aumentar prioridade de quem nao tem
     if time % 5 == 0
-
+      process_manager.change_priorities
     end
 
     time += 1

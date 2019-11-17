@@ -15,7 +15,7 @@ class SOProcess
 
   def initialize(process)
     @created_at = process[0]
-    @priority = process[1] #process.priority
+    @priority = process[1].to_i #process.priority
     @cpu_time = process[2].to_i #process.cpu_time
     @memory_blocks = process[3].to_i #process.memory_blocks
     @printer_code = process[4] #process.printer_code

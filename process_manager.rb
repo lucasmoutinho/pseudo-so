@@ -91,4 +91,42 @@ class ProcessManager
       self.lastPID += 1
     end
   end
+
+  # Atualiza prioridades com base no tempo que o processo não foi executado para evitar starvation
+  def change_priorities
+    real_time_process = real_time_queue.shift
+    first_queue_process = first_queue.shift
+    second_queue_process = second_queue.shift
+
+    # aumenta as prioridades antes de trocar de fila (aging)
+    if real_time_process
+      real_time_process.priority += 1
+      first_queue.push real_time_process
+    end
+    if first_queue_process
+      first_queue_process.priority += 1
+      second_queue.push first_queue_process
+    end
+    if second_queue_process
+      second_queue_process.priority += 1
+      third_queue.push second_queue_process
+    end
+
+  end
+
+  def remove_process(process)
+    case process.priority.to_i
+    when 0
+      @real_time_queue.delete process
+    when 1
+      @first_queue.delete process
+    when 2
+      @second_queue.delete process
+    when 3
+      @third_queue.delete process
+    else
+      puts "No default priority found"
+      return "cafebabe"
+    end
+  end
 end
