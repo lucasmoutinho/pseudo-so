@@ -44,7 +44,7 @@ def main
 
   aux_filesystem_array.each do |operation|
     aux_operation = FileOperation.new(operation.split(','))
-    puts "aux_operation: #{aux_operation.file}"
+    puts "aux_operation: #{aux_operation.opcode}"
     filesystem_manager.operations.push aux_operation
   end
 
