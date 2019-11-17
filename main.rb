@@ -172,6 +172,11 @@ def main
       break
     end
 
+    # fazer logica de escalonador aumentar prioridade de quem nao tem
+    if time % 5 == 0
+
+    end
+
     time += 1
   end
 end

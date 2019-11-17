@@ -6,7 +6,7 @@ class IOManager
 
   attr_accessor :resources
 
-  def initiailze
+  def initialize
     @resources = {
         scanner: Array.new(SCANNER_QUANTITY),
         printer: Array.new(PRINTER_QUANTITY),
@@ -43,7 +43,7 @@ class IOManager
       end
     end
 
-    if process.sata
+    if process.sata_code
       if is_resource_available?(:sata)
         index = @resources[:sata].index(nil)
         @resources[:sata][index] = pid
