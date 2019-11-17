@@ -6,7 +6,7 @@ class FileOperation
     def initialize(operation)
         @processId = operation[0].to_i
         @opcode = operation[1].to_i
-        @file = operation[2].to_i
+        @file = operation[2]
         if(opcode == 0)
             @size = operation[3].to_i
         else

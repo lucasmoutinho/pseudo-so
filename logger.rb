@@ -1,4 +1,4 @@
-class Logger
+class SOLogger
   @@last_process = nil
 
   def dispatch(process) # informações do processo à ser dispatched
@@ -6,12 +6,13 @@ class Logger
     puts "PID:\t #{process.pid}"
     puts "offset:\t #{process.offset}"
     puts "blocks:\t #{process.memory_blocks}"
-    puts "priority:\t #{process.priority}"
+    puts "priority: #{process.priority}"
     puts "time:\t #{process.cpu_time}"
-    puts "printers:\t #{process.printer_code}"
-    puts "scanner:\t #{process.scanner_request}"
+    puts "printers: #{process.printer_code}"
+    puts "scanner: #{process.scanner_request}"
     puts "modem:\t #{process.modem_request}"
     puts "drives:\t #{process.sata_code}"
+    puts "\n"
   end
 
   def execute(process)
@@ -30,5 +31,24 @@ class Logger
       puts "P#{process.pid} return SIGINT"
       @@last_process = -1
     end
+  end
+
+  def disk_manager(filesystem)
+    puts "File system =>"
+    filesystem.log.each_with_index do |msg, idx|
+      puts "Operação #{idx + 1} => #{msg[:status]}"
+      puts msg[:mensagem]
+    end
+
+    filesystem.operations.each_with_index do |op, idx|
+      puts "Operação #{idx+1} => Falha"
+      puts "O processo #{op.processId} não existe"
+    end
+
+    puts "Ocupação do disco:"
+    filesystem.disc.each do |file_disc|
+      print "#{file_disc} | "
+    end
+    print "\n"
   end
 end
