@@ -50,8 +50,8 @@ def main
   time = 0
   loop do
     # puts time
-    # puts process_manager.main_queue
-    process_manager.print_all_queues
+    # process_manager.print_all_queues
+
     while process_manager.main_queue.any? # enquanto tiver processos na fila principal
       if process_manager.main_queue.first.created_at.to_i.equal? time.to_i # se o processo tiver chegado naquele tempo
         process_manager.scalonate_process
@@ -70,7 +70,7 @@ def main
       process_manager.in_execution.times_executed += 1
 
       if process_manager.in_execution.cpu_time.zero? # se acabar o tempo de cpu do processo
-        io_manager.free_resource(process_manager.in_execution)
+        # io_manager.free_resource(process_manager.in_execution)
         memory_manager.kill(process_manager.in_execution)
         process_manager.in_execution = nil
       end
@@ -80,6 +80,7 @@ def main
         next unless real_time_process
         process_manager.generate_pid(real_time_process)
         offset = memory_manager.save(real_time_process)
+        # puts "aqui #{offset}"
         if offset
           process_manager.in_execution = real_time_process
           process_manager.in_execution.offset = offset
@@ -166,7 +167,7 @@ def main
       break
     end
 
-    if time > 10
+    if time > 6
       break
     end
 

@@ -4,6 +4,8 @@ class IOManager
   MODEM_QUANTITY = 1
   SATA_QUANTITY = 2
 
+  attr_accessor :resources
+
   def initiailze
     @resources = {
         scanner: Array.new(SCANNER_QUANTITY),
@@ -52,13 +54,13 @@ class IOManager
   def free_resource(process)
     pid = process.pid
 
-    scanner_index = @resources[:scanner].index(pid)
+    scanner_index = self.resources[:scanner].index(pid)
     if scanner_index
       @resources[:scanner][scanner_index] = nil
     end
 
     printer_index = @resources[:printer].index(pid)
-    if printer
+    if printer_index
       @resources[:printer][printer_index] = nil
     end
 

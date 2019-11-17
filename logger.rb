@@ -6,12 +6,13 @@ class SOLogger
     puts "PID:\t #{process.pid}"
     puts "offset:\t #{process.offset}"
     puts "blocks:\t #{process.memory_blocks}"
-    puts "priority:\t #{process.priority}"
+    puts "priority: #{process.priority}"
     puts "time:\t #{process.cpu_time}"
-    puts "printers:\t #{process.printer_code}"
-    puts "scanner:\t #{process.scanner_request}"
+    puts "printers: #{process.printer_code}"
+    puts "scanner: #{process.scanner_request}"
     puts "modem:\t #{process.modem_request}"
     puts "drives:\t #{process.sata_code}"
+    puts "\n"
   end
 
   def execute(process)

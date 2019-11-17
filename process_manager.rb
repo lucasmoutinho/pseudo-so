@@ -55,7 +55,7 @@ class ProcessManager
     process_on_top = @user_queue.shift # para ser uma fila
 
     if process_on_top
-      puts "priority: #{process_on_top.priority}"
+      # puts "priority: #{process_on_top.priority}"
       case process_on_top.priority.to_i
       when 0 # Processo de prioridade 0 é de tempo real e é alocado nessa fila
         @real_time_queue.push process_on_top

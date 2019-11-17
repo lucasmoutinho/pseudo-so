@@ -24,18 +24,23 @@ class MemoryManager
                     available += 1
                     if(available == process.memory_blocks)
                         offset = i - available + 1
-                        @memory[offset % offset + available] = process.memory_blocks * [process.pid]
+                        if offset != 0
+                            @memory[offset % offset + available] = process.memory_blocks * [process.pid]
+                        end
                         #break
                     end
                 else
                     available = 0
                 end
             }
+            return offset || 1
         end
-        return offset
+        return nil
     end
 
     def kill(process)
-        @memory[process.offset % process.offset + process.memory_blocks] = process.memory_blocks * [nil]
+        if process.offset != 0
+            @memory[process.offset % process.offset + process.memory_blocks] = process.memory_blocks * [nil]
+        end
     end
 end
