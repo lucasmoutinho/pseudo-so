@@ -46,6 +46,9 @@ class SOLogger
     end
 
     puts "Ocupação do disco:"
-    puts filesystem.disc
+    filesystem.disc.each do |file_disc|
+      print "#{file_disc} | "
+    end
+    print "\n"
   end
 end
