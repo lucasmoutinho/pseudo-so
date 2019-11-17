@@ -28,18 +28,18 @@ class SOProcess
   end
 
   def scanner?
-    @scanner_request == 1
+    @scanner_request.to_i == 1
   end
 
   def printer?
-    @printer_code != 0
+    @printer_code.to_i < 2
   end
 
   def modem?
-    @modem_request == 1
+    @modem_request.to_i == 1
   end
 
   def sata?
-    @sata_code != 0
+    @sata_code.to_i < 2
   end
 end

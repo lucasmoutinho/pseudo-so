@@ -26,6 +26,7 @@ class IOManager
       if is_resource_available?(:scanner)
         index = @resources[:scanner].index(nil)
         @resources[:scanner][index] = pid
+        puts "Scanner sendo usado por P#{pid}"
       end
     end
 
@@ -33,6 +34,7 @@ class IOManager
       if is_resource_available?(:printer)
         index = @resources[:printer].index(nil)
         @resources[:printer][index] = pid
+        puts "Impressora sendo usado por P#{pid}"
       end
     end
 
@@ -40,6 +42,7 @@ class IOManager
       if is_resource_available?(:modem)
         index = @resources[:modem].index(nil)
         @resources[:modem][index] = pid
+        puts "Modem sendo usado por P#{pid}"
       end
     end
 
@@ -47,6 +50,7 @@ class IOManager
       if is_resource_available?(:sata)
         index = @resources[:sata].index(nil)
         @resources[:sata][index] = pid
+        puts "Sata sendo usado por P#{pid}"
       end
     end
   end
