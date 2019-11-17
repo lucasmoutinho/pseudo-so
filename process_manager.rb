@@ -1,5 +1,5 @@
 class ProcessManager
-  MAX_SIZE = 10
+  MAX_SIZE = 1
 
   attr_accessor :real_time_queue
   attr_accessor :user_queue
@@ -22,6 +22,7 @@ class ProcessManager
   end
 
   def scalonate_process # função utilizada para escalonar processos
+    puts "queue length: #{@main_queue.length}"
     if @main_queue.length > 0
       process_on_top = @main_queue.shift # para ser uma fila
 
@@ -39,18 +40,23 @@ class ProcessManager
   def scalonate_user_process
     process_on_top = @user_queue.shift # para ser uma fila
 
-    case process_on_top.priority
-    when 0 # Processo de prioridade 0 é de tempo real e é alocado nessa fila
-      @real_time_queue.push process_on_top
-    when 1
-      @first_queue.push process_on_top
-    when 2
-      @second_queue.push process_on_top
-    when 3
-      @third_queue.push process_on_top
+    if process_on_top
+      puts "priority: #{process_on_top.priority}"
+      case process_on_top.priority.to_i
+      when 0 # Processo de prioridade 0 é de tempo real e é alocado nessa fila
+        @real_time_queue.push process_on_top
+      when 1
+        @first_queue.push process_on_top
+      when 2
+        @second_queue.push process_on_top
+      when 3
+        @third_queue.push process_on_top
+      else
+        puts "No default priority found"
+        return "cafebabe"
+      end
     else
-      puts "No default priority found"
-      return "cafebabe"
+      return "Sem processos na fila de usuario"
     end
   end
 
@@ -62,5 +68,13 @@ class ProcessManager
     @third_queue.any? or
     @main_queue.any? or
     !@in_execution.nil?
+  end
+
+  # Gera um pid para o processo e atualiza qual foi o último gerado
+  def generate_pid(process)
+    if process
+      process.pid = self.lastPID + 1
+      self.lastPID += 1
+    end
   end
 end

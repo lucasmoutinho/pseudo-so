@@ -8,6 +8,9 @@ require './process'
 require './process_manager'
 
 def main
+  # definindo tamanho do quantum
+  quantum = 1
+
   process_manager = ProcessManager.new
   memory_manager = MemoryManager.new
   io_manager = IOManager.new
@@ -17,9 +20,6 @@ def main
   process_file = "processes.txt"
   files_file = "files.txt"
 
-  puts "Before read"
-  # puts process_manager.main_queue
-  # puts filesystem_manager.files
   # Ler arquivo de processos
   aux_process_array = File.readlines(process_file)
   aux_process_array.each do |process|
@@ -40,11 +40,136 @@ def main
   puts process_manager.main_queue
   puts filesystem_manager.files
 
-  # process_manager.main_queue = process_manager.main_queue.sort_by { |process| process.created_at  }
+  # Ordena a fila principal por prioridade
+  process_manager.main_queue = process_manager.main_queue.compact.sort_by{|process| process.created_at}
 
-  # while(true)
-  #
-  # end
+  puts "After sort"
+  puts process_manager.main_queue
+
+  time = 0
+  loop do
+    puts time
+    puts process_manager.main_queue
+    while process_manager.main_queue.any? # enquanto tiver processos na fila principal
+      if process_manager.main_queue.first.created_at.to_i.equal? time.to_i # se o processo tiver chegado naquele tempo
+        process_manager.scalonate_process
+      else # ja esta por ordem de tempo
+        break
+      end
+    end
+
+    process_manager.user_queue.each do # para cada processo de usuário na fila ele é alocado na fila certa
+      process_manager.scalonate_user_process
+    end
+
+    if process_manager.in_execution # Aqui vem a lógica de 'executar' o processo
+      puts "Processo P#{process_manager.in_execution.pid} em execução..."
+      process_manager.in_execution.cpu_time -= quantum # diminui em 1 unidade de tempo a execucao
+      process_manager.in_execution.times_executed += 1
+
+      if process_manager.in_execution.cpu_time.zero? # se acabar o tempo de cpu do processo
+        io_manager.free_resource(process_manager.in_execution)
+        memory_manager.kill(process_manager.in_execution)
+        process_manager.in_execution = nil
+      end
+    else # Se não tiver processo sendo executado ve qual vai ser
+      # dispachar processos de tempo real primeiro
+      process_manager.real_time_queue.each do |real_time_process|
+        next unless real_time_process
+        process_manager.generate_pid(real_time_process)
+        offset = memory_manager.save(real_time_process)
+        if offset
+          process_manager.in_execution = real_time_process
+          process_manager.in_execution.offset = offset
+          logger.dispatch(process_manager.in_execution)
+        else # nao foi possível salvar o processo na memoria
+          real_time_process.pid = nil
+          process_manager.lastPID -= 1
+        end
+      end
+
+      # dispachar processos de usuário de acordo com as filas
+      process_manager.first_queue.each do |first_priority_process|
+        next unless first_priority_process
+
+        if first_priority_process.offset # se ja tiver sido alocado
+          offset = first_priority_process.offset
+        else
+          process_manager.generate_pid(first_priority_process)
+          io_manager.alocate_resource(first_priority_process) # aloca recursos de io requisitados pelo processo de usuário
+          offset = memory_manager.save(first_priority_process)
+          if offset
+            logger.dispatch(first_priority_process)
+          end
+        end
+
+        if offset
+          process_manager.in_execution = first_priority_process
+          process_manager.in_execution.offset = offset
+        else # se nao conseguir alocar o processo
+          first_priority_process.pid = nil
+          process_manager.lastPID -= 1
+        end
+      end
+
+      process_manager.second_queue.each do |second_priority_process|
+        next unless second_priority_process
+
+        if second_priority_process.offset # se ja tiver sido alocado
+          offset = second_priority_process.offset
+        else
+          process_manager.generate_pid(second_priority_process)
+          io_manager.alocate_resource(second_priority_process) # aloca recursos de io requisitados pelo processo de usuário
+          offset = memory_manager.save(second_priority_process)
+          if offset
+            logger.dispatch(second_priority_process)
+          end
+        end
+
+        if offset
+          process_manager.in_execution = second_priority_process
+          process_manager.in_execution.offset = offset
+        else # se nao conseguir alocar o processo
+          second_priority_process.pid = nil
+          process_manager.lastPID -= 1
+        end
+      end
+
+      process_manager.third_queue.each do |third_priority_process|
+        next unless third_priority_process
+
+        if third_priority_process.offset # se ja tiver sido alocado
+          offset = third_priority_process.offset
+        else
+          process_manager.generate_pid(third_priority_process)
+          io_manager.alocate_resource(third_priority_process) # aloca recursos de io requisitados pelo processo de usuário
+          offset = memory_manager.save(third_priority_process)
+          if offset
+            logger.dispatch(third_priority_process)
+          end
+        end
+
+        if offset
+          process_manager.in_execution = third_priority_process
+          process_manager.in_execution.offset = offset
+        else # se nao conseguir alocar o processo
+          third_priority_process.pid = nil
+          process_manager.lastPID -= 1
+        end
+      end
+
+    end
+
+    unless process_manager.any_process_left?
+      break
+    end
+
+    if time > 10
+      break
+    end
+
+    time += 1
+  end
 end
 
 main
