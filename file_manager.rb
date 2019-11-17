@@ -67,12 +67,12 @@ class FileManager
         ops = @operations.select { |op| op.processId == process.pid }
         puts "ops: #{ops}"
         ops.each do |op|
-            if(op['opcode'] == 0)
-                create_file(op['file'], op['size'], process['process_id'])
+            if(op.opcode == 0)
+                create_file(op.file, op.size, process.pid)
             else
-                file = @files.detect {|file| file['name'] == op['file']}
+                file = @files.detect {|file| file.name == op.file}
                 if(file != nil)
-                    if(process['priority'] == 0 || file['creator'] == nil || process['process_id'] == file['creator'])
+                    if(process.priority == 0 || file.creator == nil || process.pid == file.creator)
                         delete_file(file)
                         @log.append({
                             status: 'sucesso',

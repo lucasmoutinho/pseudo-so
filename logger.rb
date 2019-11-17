@@ -36,8 +36,8 @@ class SOLogger
   def disk_manager(filesystem)
     puts "File system =>"
     filesystem.log.each_with_index do |msg, idx|
-      puts "Operação #{idx + 1} => #{msg.status}"
-      puts msg.mensagem
+      puts "Operação #{idx + 1} => #{msg[:status]}"
+      puts msg[:mensagem]
     end
 
     filesystem.operations.each_with_index do |op, idx|
