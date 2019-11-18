@@ -40,10 +40,10 @@ class SOLogger
       puts msg[:mensagem]
     end
 
-    filesystem.operations.each_with_index do |op, idx|
-      puts "Operação #{idx+1} => Falha"
-      puts "O processo #{op.processId} não existe"
-    end
+    # filesystem.operations.each_with_index do |op, idx|
+    #   puts "Operação #{idx+1} => Falha"
+    #   puts "O processo #{op.processId} não existe"
+    # end
 
     puts "Ocupação do disco:"
     filesystem.disc.each do |file_disc|
