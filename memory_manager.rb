@@ -25,7 +25,9 @@ class MemoryManager
                     if(available == process.memory_blocks)
                         offset = i - available + 1
                         if offset != 0
-                            @memory[offset % offset + available] = process.memory_blocks * [process.pid]
+                            process.memory_blocks.times do |i|
+                                @memory[offset % offset + available] = process.pid
+                            end
                         end
                         break
                     end
@@ -40,7 +42,9 @@ class MemoryManager
 
     def kill(process)
         if process.offset != 0
-            @memory[process.offset % process.offset + process.memory_blocks] = process.memory_blocks * [nil]
+            process.memory_blocks.times do |i|
+                @memory[process.offset % process.offset + process.memory_blocks + i] = nil
+            end
         end
     end
 end

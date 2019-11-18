@@ -27,7 +27,7 @@ class FileManager
     end
 
     def create_file(name, size, creator)
-        puts "name: #{name}"
+        # puts "name: #{name}"
         offset = nil
         available = 0
         if(files.any? {|file| file.name == name})
@@ -42,7 +42,7 @@ class FileManager
             block = @disc[i]
             if(block == 0)
                 available += 1
-                puts "fff: #{available == size} size: #{size}"
+                # puts "fff: #{available == size} size: #{size}"
                 if(available == size)
                     offset = i - available + 1
                     if offset != 0
@@ -82,9 +82,9 @@ class FileManager
 
     def operate_process(process)
         ops = @operations.select { |op| op.processId == process.pid }
-        puts "ops: #{ops}"
+        # puts "ops: #{ops}"
         ops.each do |op|
-            puts "opcode: #{op.opcode}"
+            # puts "opcode: #{op.opcode}"
             if(op.opcode == 0)
                 create_file(op.file, op.size, process.pid)
             else

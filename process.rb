@@ -42,4 +42,25 @@ class SOProcess
   def sata?
     @sata_code.to_i < 2
   end
+
+  def should_not_be_stoped?(real_time_queue, first_queue, second_queue)
+    if self.priority.to_i == 0
+      return true
+    elsif self.priority.to_i == 1
+      if real_time_queue.length > 0 # se tiver algum processo na fila de realtime, entao deve parar o de prioridade 1
+        return false
+      end
+    elsif self.priority.to_i == 2
+      if real_time_queue.length > 0 or first_queue.length > 0 # se tiver algum processo na fila de realtime ou primeira, entao deve parar o de prioridade 2
+        return false
+      end
+    else
+      if real_time_queue.length > 0 or first_queue.length > 0 or second_queue.length > 0 # se tiver algum processo na fila de realtime ou primeira, entao deve parar o de prioridade 2
+        return false
+      end
+    end
+
+    return true
+  end
+
 end

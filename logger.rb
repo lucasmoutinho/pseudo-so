@@ -2,7 +2,7 @@ class SOLogger
   @@last_process = nil
 
   def dispatch(process) # informações do processo à ser dispatched
-    puts "dispatcher =>"
+    puts "\n\ndispatcher =>"
     puts "PID:\t #{process.pid}"
     puts "offset:\t #{process.offset}"
     puts "blocks:\t #{process.memory_blocks}"
@@ -12,7 +12,7 @@ class SOLogger
     puts "scanner: #{process.scanner_request}"
     puts "modem:\t #{process.modem_request}"
     puts "drives:\t #{process.sata_code}"
-    puts "\n"
+    puts "\n\n"
   end
 
   def execute(process)
