@@ -79,7 +79,7 @@ def main
       process_manager.scalonate_user_process
     end
 
-    if process_manager.in_execution # Aqui vem a lógica de 'executar' o processo
+    if(process_manager.in_execution) #&& process_manager.in_execution.should_not_be_stoped?(process_manager.real_time_queue, process_manager.first_queue, process_manager.second_queue)) # Aqui vem a lógica de 'executar' o processo
       # puts "Processo P#{process_manager.in_execution.pid} em execução..."
       process_manager.in_execution.cpu_time -= quantum # diminui em 1 unidade de tempo a execucao
       process_manager.in_execution.times_executed += 1
